@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/nandushaji/golang_rest/middleware"
 	"github.com/nandushaji/golang_rest/models"
 	"github.com/nandushaji/golang_rest/services"
 )
@@ -71,6 +72,7 @@ func (u *UserController) DeleteUser(ctx *gin.Context) {
 
 func (u *UserController) RegisterUserRoutes(rg *gin.RouterGroup) {
 	userroute := rg.Group("/user")
+	userroute.Use(middleware.AuthMiddleware())
 	userroute.POST("/", u.CreateUser)
 	userroute.GET("/", u.GetAllUsers)
 	userroute.GET("/:id", u.GetUser)

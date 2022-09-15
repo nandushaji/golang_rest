@@ -2,55 +2,43 @@ package services
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/nandushaji/golang_rest/models"
+	"gorm.io/gorm"
 )
 
 type UserService struct {
-	userCollection []models.User
-	ctx            context.Context
+	userDb *gorm.DB
+	ctx    context.Context
 }
 
-func NewUserService(userCollection []models.User, ctx context.Context) IUserService {
+func NewUserService(userDb *gorm.DB, ctx context.Context) IUserService {
 	return &UserService{
-		userCollection: userCollection,
-		ctx:            ctx,
+		userDb: userDb,
+		ctx:    ctx,
 	}
 }
 
 func (u *UserService) CreateUser(user *models.User) (*models.User, error) {
-	u.userCollection = append(u.userCollection, *user)
+	result := u.userDb.Create(&user)
+	fmt.Printf(result.Name())
 	return user, nil
 }
 
 func (u *UserService) GetUser(id *int) (*models.User, error) {
-	for _, user := range u.userCollection {
-		if user.Id == *id {
-			return &user, nil
-		}
-	}
+
 	return nil, nil
 }
 
 func (u *UserService) UpdateUser(id *int, user *models.User) (*models.User, error) {
-	for i, existingUser := range u.userCollection {
-		if existingUser.Id == *id {
-			u.userCollection[i] = *user
-			return user, nil
-		}
-	}
+
 	return nil, nil
 }
 
 func (u *UserService) GetAllUsers() *[]models.User {
-	return &u.userCollection
+	return nil
 }
-
 func (u *UserService) DeleteUser(id *int) error {
-	for i, existingUser := range u.userCollection {
-		if existingUser.Id == *id {
-			u.userCollection = append(u.userCollection[0:i], u.userCollection[i+1:]...)
-		}
-	}
 	return nil
 }

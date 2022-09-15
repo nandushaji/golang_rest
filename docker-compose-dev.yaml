@@ -1,0 +1,28 @@
+version: '3'
+services:
+  postgres:
+    container_name: golang_postgres
+    image: postgres:14.5
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=golang_db
+      - POSTGRES_PASSWORD=qwerty
+      - POSTGRES_DB=restdb
+      - PGADMIN_DEFAULT_EMAIL=admin@example.com
+      - PGADMIN_DEFAULT_PASSWORD=12345
+  pgadmin:
+    container_name: pgadmin4
+    image: dpage/pgadmin4
+    ports:
+      - "8080:80"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@example.com
+      - PGADMIN_DEFAULT_PASSWORD=12345
+  pubsub:
+    container_name: pubsub_emulator
+    image: messagebird/gcloud-pubsub-emulator:latest
+    ports:
+      - "8085:8681"
+    environment:
+      - PUBSUB_PROJECT1=golang
